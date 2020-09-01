@@ -3,6 +3,8 @@ var app = express();
 var http = require("http").createServer(app);
 var io = require("socket.io")(http);
 
+var players = [];
+
 app.use(
   "/public/TemplateData",
   express.static(__dirname + "/public/TemplateData")
@@ -17,9 +19,16 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });
-  socket.on("PING", () => {
+  socket.on("PING", (data) => {
     console.log("Ping received from client");
-    socket.emit("PONG");
+
+    players = players.filter((item) => item.id != data.id);
+    players.push(data);
+    let pongResponse = {
+      players: players.filter((item) => item.id != data.id),
+    };
+    console.log(pongResponse);
+    socket.emit("PONG", pongResponse);
   });
 });
 
