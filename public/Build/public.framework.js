@@ -1296,7 +1296,7 @@ function _emscripten_asm_const_ii(code, a0) {
  return ASM_CONSTS[code](a0);
 }
 STATIC_BASE = GLOBAL_BASE;
-STATICTOP = STATIC_BASE + 2320832;
+STATICTOP = STATIC_BASE + 2321024;
 __ATINIT__.push({
  func: (function() {
   __GLOBAL__sub_I_AIScriptingClasses_cpp();
@@ -3226,7 +3226,7 @@ __ATINIT__.push({
   ___emscripten_environ_constructor();
  })
 });
-var STATIC_BUMP = 2320832;
+var STATIC_BUMP = 2321024;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 var tempDoublePtr = STATICTOP;
@@ -3235,11 +3235,12 @@ assert(tempDoublePtr % 8 == 0);
 function _BrowserLog(message) {
  console.log(Pointer_stringify(message));
 }
-function _Emit(callback_id, userId, data) {
- callback_id = Pointer_stringify(callback_id);
+function _Emit(callbackId, userSessionId, data) {
+ callbackId = Pointer_stringify(callbackId);
+ userSessionId = Pointer_stringify(userSessionId);
  data = Pointer_stringify(data);
- userSocket.emit(callback_id, {
-  id: userId,
+ userSocket.emit(callbackId, {
+  id: userSessionId,
   location: JSON.parse(data)
  });
 }
@@ -3554,11 +3555,12 @@ function _JS_SystemInfo_HasWebGL() {
  return Module.SystemInfo.hasWebGL;
 }
 function _SynchronizeSocketEventsToGameObject() {
- userSocket.on("PONG", (function(players) {
-  console.log("List of players:");
-  console.log(players);
-  SendMessage("NetworkManager", "Pong", JSON.stringify(players));
- }));
+ if (typeof userSocket.id !== "undefined") {
+  SendMessage("NetworkManager", "ReceiveUserSessionId", userSocket.id);
+  userSocket.on("PONG", (function(players) {
+   SendMessage("NetworkManager", "Pong", JSON.stringify(players));
+  }));
+ }
 }
 function ___atomic_compare_exchange_8(ptr, expected, desiredl, desiredh, weak, success_memmodel, failure_memmodel) {
  var pl = HEAP32[ptr >> 2];

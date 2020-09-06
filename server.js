@@ -15,19 +15,19 @@ app.use("/public/Build", express.static(__dirname + "/public/Build"));
 app.use(express.static(__dirname + "/public"));
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log("a user connected: " + socket.id);
+  console.log(players);
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("user disconnected: " + socket.id);
+    players = players.filter((item) => item.id != socket.id);
+    console.log(players);
   });
   socket.on("PING", (data) => {
-    console.log("Ping received from client");
-
     players = players.filter((item) => item.id != data.id);
     players.push(data);
     let pongResponse = {
       players: players.filter((item) => item.id != data.id),
     };
-    console.log(pongResponse);
     socket.emit("PONG", pongResponse);
   });
 });
@@ -36,3 +36,8 @@ let port = process.env.PORT || 3000;
 http.listen(port, () => {
   console.log("listening on *:" + port);
 });
+
+setInterval(function () {
+  console.log("Active Players");
+  console.log(players);
+}, 5000);
