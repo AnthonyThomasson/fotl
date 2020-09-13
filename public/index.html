@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Unity WebGL Player | Networking</title>
+    <title>Unity WebGL Player | Top-Down</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico" />
     <link rel="stylesheet" href="TemplateData/style.css" />
   </head>
@@ -19,7 +19,7 @@
       <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
         <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Networking</div>
+        <div id="unity-build-title">Top-Down</div>
       </div>
     </div>
     <script src="dist/main.js"></script>
@@ -32,7 +32,7 @@
         codeUrl: buildUrl + "/public.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
-        productName: "Networking",
+        productName: "Top-Down",
         productVersion: "1.0",
       };
 
@@ -58,7 +58,6 @@
           progressBarFull.style.width = 100 * progress + "%";
         })
           .then((unityInstance) => {
-            var unityInstance = unityInstance;
             loadingBar.style.display = "none";
             fullscreenButton.onclick = () => {
               unityInstance.SetFullscreen(1);
