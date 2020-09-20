@@ -28,6 +28,7 @@ io.on("connection", (socket) => {
     let pongResponse = {
       players: players.filter((item) => item.id != data.id),
     };
+    console.log(JSON.stringify(pongResponse));
     socket.emit("PONG", pongResponse);
   });
 });
