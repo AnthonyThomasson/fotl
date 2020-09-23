@@ -22,14 +22,13 @@ io.on("connection", (socket) => {
     players = players.filter((item) => item.id != socket.id);
     console.log(players);
   });
-  socket.on("PING", (data) => {
+  socket.on("ReportPlayerPosition", (data) => {
     players = players.filter((item) => item.id != data.id);
     players.push(data);
     let pongResponse = {
       players: players.filter((item) => item.id != data.id),
     };
-    console.log(JSON.stringify(pongResponse));
-    socket.emit("PONG", pongResponse);
+    socket.emit("ReceivePositions", pongResponse);
   });
 });
 

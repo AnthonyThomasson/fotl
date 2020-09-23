@@ -1296,7 +1296,7 @@ function _emscripten_asm_const_ii(code, a0) {
  return ASM_CONSTS[code](a0);
 }
 STATIC_BASE = GLOBAL_BASE;
-STATICTOP = STATIC_BASE + 2137648;
+STATICTOP = STATIC_BASE + 2142224;
 __ATINIT__.push({
  func: (function() {
   __GLOBAL__sub_I_AIScriptingClasses_cpp();
@@ -3226,25 +3226,21 @@ __ATINIT__.push({
   ___emscripten_environ_constructor();
  })
 });
-var STATIC_BUMP = 2137648;
+var STATIC_BUMP = 2142224;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 var tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 assert(tempDoublePtr % 8 == 0);
-function _BrowserLog(message) {
- console.log(Pointer_stringify(message));
+function _Emit(boundAction) {
+ userSocket.emit(Pointer_stringify(boundAction));
 }
-function _Emit(callbackId, userSessionId, position, rotation) {
- userSocket.emit(Pointer_stringify(callbackId), {
-  id: Pointer_stringify(userSessionId),
-  position: JSON.parse(Pointer_stringify(position)),
-  rotation: JSON.parse(Pointer_stringify(rotation))
- });
+function _EmitMessage(boundAction, boundMessage) {
+ userSocket.emit(Pointer_stringify(boundAction), JSON.parse(Pointer_stringify(boundMessage)));
 }
-function _GetUserSessionId(boundClassName, boundMethodName) {
+function _GetClientSessionId(boundGameObject, boundMethodName) {
  if (typeof userSocket.id !== "undefined") {
-  SendMessage(Pointer_stringify(boundClassName), Pointer_stringify(boundMethodName), userSocket.id);
+  SendMessage(Pointer_stringify(boundGameObject), Pointer_stringify(boundMethodName), userSocket.id);
  }
 }
 function _JS_Cursor_SetImage(ptr, length) {
@@ -3670,14 +3666,12 @@ function _JS_WebRequest_SetResponseHandler(request, arg, onresponse) {
 function _JS_WebRequest_SetTimeout(request, timeout) {
  wr.requestInstances[request].timeout = timeout;
 }
-function _SynchronizeSocketEventToClass(boundGameObjectName, boundMethodName, boundSocketEvent) {
- if (Pointer_stringify(boundSocketEvent) == "PONG") {
-  var gameObjectName = Pointer_stringify(boundGameObjectName);
-  var methodName = Pointer_stringify(boundMethodName);
-  userSocket.on("PONG", (function(players) {
-   SendMessage(gameObjectName, methodName, JSON.stringify(players));
-  }));
- }
+function _SynchronizeEventToGameObject(boundGameObjectName, boundMethodName, boundSocketEvent) {
+ var gameObjectName = Pointer_stringify(boundGameObjectName);
+ var methodName = Pointer_stringify(boundMethodName);
+ userSocket.on(Pointer_stringify(boundSocketEvent), (function(players) {
+  SendMessage(gameObjectName, methodName, JSON.stringify(players));
+ }));
 }
 function ___atomic_compare_exchange_8(ptr, expected, desiredl, desiredh, weak, success_memmodel, failure_memmodel) {
  var pl = HEAP32[ptr >> 2];
@@ -17201,9 +17195,9 @@ Module.asmLibraryArg = {
  "invoke_vijjji": invoke_vijjji,
  "invoke_vjiiii": invoke_vjiiii,
  "invoke_vjji": invoke_vjji,
- "_BrowserLog": _BrowserLog,
  "_Emit": _Emit,
- "_GetUserSessionId": _GetUserSessionId,
+ "_EmitMessage": _EmitMessage,
+ "_GetClientSessionId": _GetClientSessionId,
  "_JS_Cursor_SetImage": _JS_Cursor_SetImage,
  "_JS_Cursor_SetShow": _JS_Cursor_SetShow,
  "_JS_Eval_ClearInterval": _JS_Eval_ClearInterval,
@@ -17253,7 +17247,7 @@ Module.asmLibraryArg = {
  "_JS_WebRequest_SetRequestHeader": _JS_WebRequest_SetRequestHeader,
  "_JS_WebRequest_SetResponseHandler": _JS_WebRequest_SetResponseHandler,
  "_JS_WebRequest_SetTimeout": _JS_WebRequest_SetTimeout,
- "_SynchronizeSocketEventToClass": _SynchronizeSocketEventToClass,
+ "_SynchronizeEventToGameObject": _SynchronizeEventToGameObject,
  "__ZSt18uncaught_exceptionv": __ZSt18uncaught_exceptionv,
  "___atomic_compare_exchange_8": ___atomic_compare_exchange_8,
  "___atomic_fetch_add_8": ___atomic_fetch_add_8,
