@@ -1296,7 +1296,7 @@ function _emscripten_asm_const_ii(code, a0) {
  return ASM_CONSTS[code](a0);
 }
 STATIC_BASE = GLOBAL_BASE;
-STATICTOP = STATIC_BASE + 2142720;
+STATICTOP = STATIC_BASE + 2138304;
 __ATINIT__.push({
  func: (function() {
   __GLOBAL__sub_I_AIScriptingClasses_cpp();
@@ -3226,18 +3226,23 @@ __ATINIT__.push({
   ___emscripten_environ_constructor();
  })
 });
-var STATIC_BUMP = 2142720;
+var STATIC_BUMP = 2138304;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 var tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 assert(tempDoublePtr % 8 == 0);
-function _Emit(boundAction) {
- userSocket.emit(Pointer_stringify(boundAction));
+function _BroadcastEvent(boundEvent) {
+ userSocket.emit("BroadcastEvent", {
+  eventTag: Pointer_stringify(boundEvent),
+  message: {}
+ });
 }
-function _EmitMessage(boundAction, boundMessage) {
- console.log("Emitting: " + Pointer_stringify(boundAction));
- userSocket.emit(Pointer_stringify(boundAction), JSON.parse(Pointer_stringify(boundMessage)));
+function _BroadcastEventWithMessage(boundEvent, boundMessage) {
+ userSocket.emit("BroadcastEvent", {
+  eventTag: Pointer_stringify(boundEvent),
+  message: JSON.parse(Pointer_stringify(boundMessage))
+ });
 }
 function _GetClientSessionId(boundGameObject, boundMethodName) {
  if (typeof userSocket.id !== "undefined") {
@@ -3670,8 +3675,8 @@ function _JS_WebRequest_SetTimeout(request, timeout) {
 function _SynchronizeEventToGameObject(boundGameObjectName, boundMethodName, boundSocketEvent) {
  var gameObjectName = Pointer_stringify(boundGameObjectName);
  var methodName = Pointer_stringify(boundMethodName);
- userSocket.on(Pointer_stringify(boundSocketEvent), (function(players) {
-  SendMessage(gameObjectName, methodName, JSON.stringify(players));
+ userSocket.on(Pointer_stringify(boundSocketEvent), (function(message) {
+  SendMessage(gameObjectName, methodName, JSON.stringify(message));
  }));
 }
 function ___atomic_compare_exchange_8(ptr, expected, desiredl, desiredh, weak, success_memmodel, failure_memmodel) {
@@ -17196,8 +17201,8 @@ Module.asmLibraryArg = {
  "invoke_vijjji": invoke_vijjji,
  "invoke_vjiiii": invoke_vjiiii,
  "invoke_vjji": invoke_vjji,
- "_Emit": _Emit,
- "_EmitMessage": _EmitMessage,
+ "_BroadcastEvent": _BroadcastEvent,
+ "_BroadcastEventWithMessage": _BroadcastEventWithMessage,
  "_GetClientSessionId": _GetClientSessionId,
  "_JS_Cursor_SetImage": _JS_Cursor_SetImage,
  "_JS_Cursor_SetShow": _JS_Cursor_SetShow,

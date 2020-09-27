@@ -1,4 +1,5 @@
 var express = require("express");
+const { exit } = require("process");
 var app = express();
 var http = require("http").createServer(app);
 var io = require("socket.io")(http);
@@ -25,27 +26,34 @@ io.on("connection", (socket) => {
     console.log(players);
   });
 
-  // consume player position report and respond with all the positions of the other currently active players
-  socket.on("ReportPlayerPosition", (data) => {
-    // reload reported players information
-    players = players.filter((item) => item.id != data.id);
-    players.push(data);
-
-    // respond with positions removing the player that made the request from the list
-    socket.emit("ReceivePositions", {
-      players: players.filter((item) => item.id != data.id),
-    });
-  });
-
-  // consume player position report and respond with all the positions of the other currently active players
-  socket.on("ReportShot", (data) => {
-    console.log(data.id + " SHOT");
-    socket.broadcast.emit("AnOnlinePlayerShot", data);
-  });
-
   socket.on("BroadcastEvent", (data) => {
-    console.log(data.id + " " + data.event + ": " + data.message);
-    socket.broadcast.emit(data.event, data.message);
+    let message = data.message;
+
+    switch (data.eventTag) {
+      case "ReportHit":
+        players = players.filter((item) => item.id != message.id);
+        console.log("Player " + message.id + " Killed");
+        socket.broadcast.emit("Receive" + data.eventTag, message);
+        break;
+
+      case "ReportShot":
+        console.log(message.id + " SHOT");
+        socket.broadcast.emit("Receive" + data.eventTag, message);
+        break;
+
+      case "ReportPlayerPosition":
+        // reload reported players information
+        players = players.filter((item) => item.id != message.id);
+        players.push({ id: message.id, location: message.data });
+        let response = {
+          players: players.filter((item) => item.id != message.id),
+        };
+        socket.emit("ReceivePlayerPositions", response);
+        break;
+
+      default:
+      // code block
+    }
   });
 });
 
