@@ -45,10 +45,9 @@ io.on("connection", (socket) => {
         // reload reported players information
         players = players.filter((item) => item.id != message.id);
         players.push({ id: message.id, location: message.data });
-        let response = {
+        socket.emit("ReceivePlayerPositions", {
           players: players.filter((item) => item.id != message.id),
-        };
-        socket.emit("ReceivePlayerPositions", response);
+        });
         break;
 
       default:
