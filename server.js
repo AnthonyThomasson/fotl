@@ -26,9 +26,8 @@ io.on("connection", (socket) => {
     console.log(players);
   });
 
-  socket.on("BroadcastEvent", (data) => {
+  socket.on("EmitEvent", (data) => {
     let message = data.message;
-
     switch (data.eventTag) {
       case "ReportHit":
         players = players.filter((item) => item.id != message.id);

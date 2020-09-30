@@ -1296,7 +1296,7 @@ function _emscripten_asm_const_ii(code, a0) {
  return ASM_CONSTS[code](a0);
 }
 STATIC_BASE = GLOBAL_BASE;
-STATICTOP = STATIC_BASE + 2135168;
+STATICTOP = STATIC_BASE + 2137664;
 __ATINIT__.push({
  func: (function() {
   __GLOBAL__sub_I_AIScriptingClasses_cpp();
@@ -3226,20 +3226,20 @@ __ATINIT__.push({
   ___emscripten_environ_constructor();
  })
 });
-var STATIC_BUMP = 2135168;
+var STATIC_BUMP = 2137664;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 var tempDoublePtr = STATICTOP;
 STATICTOP += 16;
 assert(tempDoublePtr % 8 == 0);
-function _BroadcastEvent(boundEvent) {
- userSocket.emit("BroadcastEvent", {
+function _EmitEvent(boundEvent) {
+ userSocket.emit("EmitEvent", {
   eventTag: Pointer_stringify(boundEvent),
   message: {}
  });
 }
-function _BroadcastEventWithMessage(boundEvent, boundMessage) {
- userSocket.emit("BroadcastEvent", {
+function _EmitEventWithMessage(boundEvent, boundMessage) {
+ userSocket.emit("EmitEvent", {
   eventTag: Pointer_stringify(boundEvent),
   message: JSON.parse(Pointer_stringify(boundMessage))
  });
@@ -15007,8 +15007,8 @@ function nullFunc_vjji(x) {
  err("Build with ASSERTIONS=2 for more info.");
  abort(x);
 }
-Module["wasmTableSize"] = 37609;
-Module["wasmMaxTableSize"] = 37609;
+Module["wasmTableSize"] = 37611;
+Module["wasmMaxTableSize"] = 37611;
 function invoke_dd(index, a1) {
  var sp = stackSave();
  try {
@@ -17201,8 +17201,8 @@ Module.asmLibraryArg = {
  "invoke_vijjji": invoke_vijjji,
  "invoke_vjiiii": invoke_vjiiii,
  "invoke_vjji": invoke_vjji,
- "_BroadcastEvent": _BroadcastEvent,
- "_BroadcastEventWithMessage": _BroadcastEventWithMessage,
+ "_EmitEvent": _EmitEvent,
+ "_EmitEventWithMessage": _EmitEventWithMessage,
  "_GetClientSessionId": _GetClientSessionId,
  "_JS_Cursor_SetImage": _JS_Cursor_SetImage,
  "_JS_Cursor_SetShow": _JS_Cursor_SetShow,
