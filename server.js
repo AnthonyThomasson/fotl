@@ -39,6 +39,11 @@ io.on("connection", (socket) => {
         console.log(message.id + " SHOT");
         socket.broadcast.emit("Receive" + data.eventTag, message);
         break;
+        
+      case "ReportReload":
+        console.log(message.id + " RELOADED");
+        socket.broadcast.emit("Receive" + data.eventTag, message);
+        break;
 
       case "ReportPlayerPosition":
         // reload reported players information
